@@ -1,0 +1,86 @@
+[rotary_encoder]
+Track position and rotation direction using the Rotary Encoder and print the current position and direction to the serial console. 
+Using the gpios naming(alias) as encoder-clk,encoder-dt in the device tree alredy.
+
+
+[16key_keypad]
+Code a scanning routine to detect which key is pressed on the 16 key keypad, there are in total 8 lines connected to each row and col. 
+Using the gpios naming(alias) as row-1, row-2, row-3, row-4, col-1, col-2, col-3,col4 defined in the device tree alredy.
+
+
+[lcd1602_display_hello_world]
+Set up the LCD1602 display, and display "Hello World" at the center of the screen. 
+Using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+
+
+[dht11_read]
+Read the temperature and humidity data from the DHT11 sensor, and print the values to the serial console. If the data is invalid (checksum error), print an error message instead.  
+For DHT11 using the gpios naming(alias) as data-dht11 defined in the device tree alredy.
+
+
+[ds1307_rtc]
+Set the DS1307 to 2026/02/02 15:37:00 and then retrieve the current time/date from the DS1307 RTC Module via I2C, and print the time/date to the serial console. 
+Using the i2c bus 0 defined in the device tree alredy.
+
+
+[mpu6050_read_i2c]
+Read raw accelerometer and gyroscope data from the MPU6050 via I2C and print to serial console. 
+Using the i2c bus 0 defined in the device tree alredy.
+
+
+[bme280_read_i2c]
+Read the humidity and temperature from a BME280 sensor using the I2C bus, and print the humidity and temperature values to the serial console.
+Using the i2c bus 0 defined in the device tree alredy.
+
+
+[bme280_read_spi]
+Read the humidity and temperature from a BME280 sensor using the SPI bus, and print the humidity and temperature values to the serial console.
+Using the sensor naming as my_sensor defined in the device tree alredy.
+
+
+[tilt_detection_alarm]
+Monitor the KY-020 tilt switch status. When tilt is detected (switch state change from open to closed or vice versa), the buzzer sounds an alarm. 
+Using the gpios naming(alias) ky020 and my-buzzer defined in the device tree alredy.
+
+
+[photoresistor_nightlight]
+Use the Photo-resistor to check if the current light level is below a threshold, and turn on the LED.
+For the LED, using the gpios naming(alias) as my-led defined in the device tree alredy.
+For the Photo-resistor, using the ADC 0 under path zephyr_user defined in the device tree alredy.
+
+
+[ds18b20_heat_alarm]
+If the temperature reading from DS18B20 exceeds 30 degrees C, flash the LED and sound the buzzer.
+For the LED, using the gpios naming(alias) as my-led defined in the device tree alredy.
+For the activate buzzer, using the gpios naming(alias) as my-buzzer defined in the device tree alredy.
+For DS18B20 using the gpios naming(alias) as data-ds18b20 defined in the device tree alredy.
+
+
+[clap_switch]
+Use the digital sound sensor (which will turn the GPIO to HIGH if the sound level exceeds the threshold) to toggle the relay state on/off. 
+Using the gpios naming(alias) as lock-relay defined in the device tree alredy.
+Using the gpios naming(alias) as sound-sensor defined in the device tree alredy.
+
+
+[hcsr501_motion_alarm]
+If the HC-SR501 (passive infrared sensor) detects motion, sound the active buzzer. 
+Using the logical hardware components naming as sr501 and my-buzzer defined in the device tree alredy.
+
+
+[hcsr04_find_distance]
+Use the ultrasonic sensor (HC-SR04) to measure distance. The sensor sends out a trigger pulse, and then listens for the echo pulse. The width of the echo pulse is proportional to the distance between the sensor and the obstacle. Calculate the distance based on the timing of the echo return, and print the distance value to the serial console. 
+Using the gpios naming(alias) sr04-trig and sr04-echo defined in the device tree alredy.
+
+
+[parking_sensor]
+Use the Ultrasonic Sensor (HC-SR04) to change the frequency of the LED and passive buzzer from lower freq to higher as objects get closer. 
+For the LED, using the gpios naming(alias) as my-led defined in the device tree alredy.
+For the  ltrasonic Sensor (HC-SR04) , Using the gpios naming(alias) sr04-trig and sr04-echo defined in the device tree alredy.
+For the passive buzzer, using the gpios naming(alias) as my-buzzer defined in the device tree alredy.
+
+
+[reverse_parking_sensor]
+Use the Ultrasonic Sensor to measure distance; pulse the Passive Buzzer faster as an object gets closer (Frequency scaling). 
+For the LED, using the gpios naming(alias) as my-led defined in the device tree alredy.
+For the  ltrasonic Sensor (HC-SR04) , Using the gpios naming(alias) sr04-trig and sr04-echo defined in the device tree alredy.
+For the passive buzzer, using the gpios naming(alias) as my-buzzer defined in the device tree alredy.

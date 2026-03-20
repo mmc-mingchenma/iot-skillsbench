@@ -1,0 +1,66 @@
+[rotary_encoder]
+Track position and rotation direction using the Rotary Encoder and print the current position and direction to the serial console. (Use GPIO 43 for CLK and GPIO 44 for DT.)
+
+
+[16key_keypad]
+Code a scanning routine to detect which key is pressed on the 16 key keypad, there are in total 8 lines connected to each row and col. (Use GPIO 38, 39, 21, 14 for Rows and GPIO 10, 9, 41, 40 for Columns.)
+
+
+[lcd1602_display_hello_world]
+Set up the LCD1602 display, and display "Hello World" at the center of the screen. (GPIO 38 for LCD RS, GPIO 39 for LCD E, and GPIO 40, 41, 42, 21 for LCD data pins D4, D5, D6, D7 in 4-bit mode.)
+
+
+[dht11_read]
+Read the temperature and humidity data from the DHT11 sensor, and print the values to the serial console. If the data is invalid (checksum error), print an error message instead. (Use GPIO 14 for the data pin.)
+
+
+[ds1307_rtc]
+Set the DS3231 to 2026/02/02 15:37:00 and then retrieve the current time/date and also the temperature data from the DS3231 RTC Module via I2C, and print the time/date to the serial console. (Use GPIO 38 for SDA and GPIO 39 for SCL.)
+
+
+[mpu6050_read_i2c]
+Read raw accelerometer and gyroscope data from the MPU6050 via I2C and print to serial console. (Use GPIO 38 for SDA and GPIO 39 for SCL.)
+
+
+[mpu6050_read_spi]
+Read raw accelerometer and gyroscope data from the MPU6050 via SPI and print to serial console. (Use GPIO 35 for SCK, GPIO 37 for MISO, GPIO 36 for MOSI, and GPIO 14 for CS.)
+
+
+[bme280_read_i2c]
+Read atmospheric pressure and temperature from a BME280 sensor using the I2C bus, and print the pressure and temperature values to the serial console. (Use GPIO 38 for SDA and GPIO 39 for SCL.)
+
+
+[bme280_read_spi]
+Read atmospheric pressure and temperature from a BME280 sensor using the SPI bus, and print the pressure and temperature values to the serial console. (Use GPIO 38 for SCK, GPIO 40 for SDO, GPIO 39 for SDI, and GPIO 41 for CS.)
+
+
+[tilt_detection_alarm]
+Monitor the KY-020 tilt switch status. When tilt is detected (switch state change from open to closed or vice versa), the buzzer sounds an alarm. (Use GPIO 14 for the KY-020 tilt switch and GPIO 13 for the buzzer.)
+
+
+[photoresistor_nightlight]
+Use the Photo-resistor to check if the current light level is below a threshold, and turn on the LED.(Use GPIO 9 for the photoresistor and GPIO 10 for the LED.)
+
+
+[ds18b20_heat_alarm]
+If the temperature reading from DS18B20 exceeds 30 degrees C, flash the LED and sound the buzzer. (Use GPIO 14 for the DS18B20 data pin, GPIO 10 for the LED, and GPIO 11 for the buzzer.)
+
+
+[clap_switch]
+Use the digital sound sensor (which will turn the GPIO to HIGH if the sound level exceeds the threshold) to toggle the relay state on/off. (Use GPIO 14 for the digital sound sensor and GPIO 21 for the relay.)
+
+
+[hcsr501_motion_alarm]
+If the HC-SR501 (passive infrared sensor) detects motion, sound the active buzzer. (Use GPIO 14 for the HC-SR501 and GPIO 11 for the active buzzer.)
+
+
+[hcsr04_find_distance]
+Use the ultrasonic sensor (HC-SR04) to measure distance. The sensor sends out a trigger pulse, and then listens for the echo pulse. The width of the echo pulse is proportional to the distance between the sensor and the obstacle. Calculate the distance based on the timing of the echo return, and print the distance value to the serial console. (Use GPIO 43 for TRIG and GPIO 44 for ECHO.)
+
+
+[parking_sensor]
+Use the Ultrasonic Sensor (HC-SR04) to change the frequency of the LED and passive buzzer from lower freq to higher as objects get closer. (Use GPIO 40 for TRIG, GPIO 41 for ECHO, GPIO 10 for the LED, and GPIO 11 for the passive buzzer.)
+
+
+[reverse_parking_sensor]
+Use the Ultrasonic Sensor to measure distance; pulse the Passive Buzzer faster as an object gets closer (Frequency scaling). (Use GPIO 40 for TRIG, GPIO 41 for ECHO, and GPIO 11 for the passive buzzer.)

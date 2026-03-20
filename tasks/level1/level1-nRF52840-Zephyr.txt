@@ -1,0 +1,59 @@
+[blink_led_1hz]
+Blink an LED at a frequency of 1 Hz. 
+Using the logical hardware components naming as my-led defined in the device tree alredy.
+
+
+[blink_led_morse_code]
+Blink the LED to spell out SOS in Morse code. 
+Using the logical hardware components naming as my-led defined in the device tree alredy.
+
+
+[blink_led_no_delay]
+Blink the LED at a frequency of 1 Hz, using a non-blocking method. 
+Using the logical hardware components naming as my-led defined in the device tree alredy.
+
+
+[blink_two_leds]
+Blink two LEDs at different frequencies of 1 Hz and 2 Hz, using a non-blocking method. 
+Using the logical hardware components naming as my-led-1 and my-led-2 defined in the device tree alredy. 
+
+
+[buzzer_doorbell]
+Read the state of a button, and turn on the buzzer when the button is pressed. 
+Using the logical hardware components naming as my-button and my-buzzer defined in the device tree alredy.
+
+
+[buzzer_button]
+Read the state of a button, and turn on the buzzer when the button is pressed. Implement software debouncing to avoid multiple triggers. 
+Using the logical hardware components naming as my-button and my-buzzer defined in the device tree alredy.
+
+
+[button_status_display]
+Read the state of a pull-down button and print "Button Pressed!" to the serial console when the button is pressed. 
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[button_status_count]
+Read the state of a pull-down button and count the number of times it has been pressed. Print the count to the serial console.
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[button_press_debounce]
+Read the state of a pull-down button and implement software debouncing to avoid multiple triggers. Print "Button Pressed!" to the serial console when the button is pressed. 
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[breathing_led]
+Breathing LEDs mimic the inhale and exhale of a lung by gradually turning brighter or dimmer over time. It is commonly used to indicate device status (e.g., system heartbeat or standby mode). The brightness of an LED can be controlled by the PWM duty cycle on the GPIO.
+In this lab, implement 50 duty cycle levels (2%, 4%, …, 100%). The duty cycle should increment or decrement to the next level every 10ms. As a result, the breathing frequency of an LED is 1 Hz.
+For the LED, using the gpios naming(alias) as my-led defined in the device tree alredy.
+
+
+[sensor_pir_human_motion]
+Read the digital output of the HC-SR501 human presence sensor, where the output is HIGH when human motion is detected and LOW when it is not. Print "Motion Detected!" to the serial console when motion is detected, and "No Motion Detected!" when no motion is detected.
+Using the logical hardware components naming as sr501 defined in the device tree alredy.
+
+
+[tmp36_read]
+Read the analog output of the TMP36 temperature sensor, where the output voltage is linearly proportional to the temperature in degrees Celsius, and print the temperature value to the serial console.
+For the temperature sensor, using the ADC 0 under path zephyr_user defined in the device tree alredy.

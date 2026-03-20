@@ -1,0 +1,22 @@
+input:
+  # Fallback task dir when CLI arg is not provided
+  task_dir: "tasks/case011"
+  # Optional: filename or index string (e.g. "prompt.txt" or "2")
+  prompt_file: prompt.txt
+
+  board: esp32_s3_box_3
+  framework: ESP-IDF #Arduino
+
+model:
+  # name: "claude-haiku-4-5"
+  name: "claude-sonnet-4-5"
+  temperature: 0.0
+  # If omitted, loader falls back to OPENAI_BASE_URL env (then OpenRouter default)
+  api_base: "http://hl279-cmp-01.egr.duke.edu:4000"
+  # Env var name that stores your API key
+  api_key_env: "OPENAI_API_KEY"
+
+graph:
+  use_skills: true
+  skills_dir: "skills-human-expert"
+  enable_diagram: false

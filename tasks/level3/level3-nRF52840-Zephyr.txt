@@ -1,0 +1,90 @@
+[dht11_read_button_display]
+Write the program that once the button is pressed, read the temp and humidity data from the DHT11 sensor and display it on the LCD1602 display. In particular, implement a GPIO-based interrupt using the push button, and every time the push button is pressed, the program will trigger the start condition on the 1-Wire and read 40-bit data returned by the DHT11 sensor. The returned data is parsed to obtain the temperature and RH (relative humidity) reading, which are then displayed on the LCD in two rows in the format of: "Temp: {X.X}C\nRH: {X.X}%" 
+For DHT11 using the gpios naming(alias) as data-dht11 defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[mpu6050_read_button_display]
+Write the program that once the button is pressed, read the accel and gyro data from the MPU6050 sensor using the I2C serial protocol and display it on the LCD1602 display. In particular, implement a GPIO-based interrupt using the push button, and every time the push button is pressed, the program will trigger read the accel and gyro data from the MPU6050 sensor. The returned data is parsed to obtain the accel and gyro reading, which are then displayed on the LCD in two rows in the format of: "Accel: {X.XX Y.YY Z.ZZ}g\nGyro: {X.XX Y.YY Z.ZZ}dps"
+For MPU6050 using i2c bus 0 defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[mpu6050_read_periodic_display]
+Write the program that reads the accel and gyro data from the MPU6050 sensor once 100ms and calculate an average of the readings over 10 samples and display it on the LCD1602 display. In particular, implement a timer-based interrupt using the push button, and every timer triggered, the program will read the accel and gyro data from the MPU6050 sensor. The returned data is parsed to obtain the accel and gyro reading, and then calculated an average over 10 samples, which are then displayed on the LCD in two rows in the format of: "Accel: {X.XX Y.YY Z.ZZ}g\nGyro: {X.XX Y.YY Z.ZZ}dps"
+For MPU6050 using i2c bus 0 defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+
+
+[safebox]
+Write the program that will read the password input from the 16 key keypad, there are in total 8 lines connected to each 4 rows and 4 cols. In particular, the password will be set to "1234". The program will read the key input from the 16 key keypad, and if the input matches the password, the program will connect the relay to unlock the safebox.
+Using the gpios naming(alias) as row-1, row-2, row-3, row-4, col-1, col-2, col-3,col4 defined in the device tree alredy.
+Using the gpios naming(alias) as lock-relay defined in the device tree alredy.
+
+
+[safebox_display]
+Write the program that will read the password input from the 16 key keypad, there are in total 8 lines connected to each 4 rows and 4 cols. In particular, the password will be set to "1234". The program will read the key input from the 16 key keypad, and if the input matches the password, the program will connect the relay to unlock the safebox. The program will also display the input password on the LCD1602 display in the format of: "Input: {XXXX}\nStatus: Success/Fail" 
+Using the gpios naming(alias) as row-1, row-2, row-3, row-4, col-1, col-2, col-3,col4 defined in the device tree alredy.
+Using the gpios naming(alias) as lock-relay defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+
+
+[lcd1602_auto_brightness_control]
+Use the ambient light intensity (the KY-018 photoresistor)  to automatically adjust the brightness of the LCD1602 backlight. Read the analog value from the KY-018 photoresistor, map it to a suitable PWM duty cycle, and control the backlight brightness accordingly. 
+For the Photo-resistor, using the ADC 0 under path zephyr_user defined in the device tree alredy. All the gain and bit width is already set.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E, K(the pin for backlight level) defined in the device tree alredy.
+
+
+[buzzer_toggle_led_freq]
+Build the circuit that integrates the button press with both the buzzer and the timer-based LED control. After the system reset, when you press the button:
+For the 1st time, a timer is triggered that toggles the external LED at 1 Hz;
+For the 2nd time, a timer is triggered that toggles the external LED at 2 Hz;
+For the 3rd time, a timer is triggered that toggles the external LED at 4 Hz;
+For the 4th time, the timer is stopped and the external LED will not blink;
+The process repeats and the toggling frequency of the LED will undergo the sequence of 1 Hz, 2 Hz, 4 Hz, N/A, 1 Hz, 2 Hz, 4 Hz, N/A, … as you press the button. In addition, every time the button is pressed, the buzzer will go off, indicating that the button has been pressed. The timing diagram is given below. The button and buzzer must be connected to separate GPIO pins, and the buzzer operation will be triggered by its own connected GPIO pin. 
+Using the logical hardware components naming as my-button and my-buzzer and my-led defined in the device tree alredy.
+
+
+[tmp36_read_button_display]
+Demonstrate a temperature logger using the TMP36 temperature sensor and ADC. Every time the button is pressed, an interrupt will be triggered, during which the samples the analog output of the TMP36 temperature sensor, and displays the temperature reading on the LCD1602 display screen (the button press will also clear the LCD screen), with a reasonable font size/layout in the format of “Temp: {ADC reading} F” 
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+Using the logical hardware components naming as my-button defined in the device tree alredy.
+For the temperature sensor, using the ADC 0 under path zephyr_user defined in the device tree alredy.
+
+
+[tmp36_read_periodic_display]
+Demonstrate the timer-based temperature logger system, where the temperature is properly sampled by the ADC and displayed on the LCD1602 module every 1 second.
+Set up a system timer that expires every 1 second, and a counter is used to track how many times the timer has expired. Every time the timer expires (i.e., every 1 second), the following things are done in the sequential order:
+The ADC samples the TMP36 analog temperature sensor;
+The calibrated reading is displayed in a new line on the LCD in the format of “Temp #{counter}: {ADC reading} F”
+The most recent reading is always displayed at the end (bottom), and the previous reading will shift up line by line as the new reading comes in every 1 second. In addition, every time the push button is pressed, an interrupt will be triggered that: Reset the counter to start from 1; and clears the LCD display (Use GPIO 12 for the button, GPIO 9 for the TMP36 analog output, GPIO 38 for LCD RS, GPIO 39 for LCD E, and GPIO 40, 41, 10, 21 for LCD data pins D4 through D7 in 4-bit mode.)
+
+
+[reaction_timer_display]
+Use the Button to start a timer and the digital shock sensor (which will turn the GPIO to HIGH if it detected the shocks) to stop it; display results in the unit of ms on the LCD1602. 
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
+Using the gpios naming(alias) as shock-sensor defined in the device tree alredy.
+For button using the gpios naming(alias) as my-button defined in the device tree alredy.
+
+
+[sensor_water_level_display]
+Use the analog water level Sensor to display a "Water Level" bar graph on the LCD. (Use GPIO 9 for the analog water level sensor, GPIO 38 for LCD RS, GPIO 39 for LCD E, and GPIO 40, 41, 10, 21 for LCD data pins D4 through D7 in 4-bit mode.)
+
+
+[buzzer_laser_tripwire]
+There is a laser emitter aiming at the Photo-resistor; trigger the activate buzzer if the beam has been blocked. 
+Using the gpios naming(alias) as lock-relay defined in the device tree alredy.
+Using the gpios naming(alias) as my-buzzer defined in the device tree alredy.
+Using the gpios naming(alias) as emitter defined in the device tree alredy.
+
+
+[joystick_buzzer_pitch]
+Use the Joystick Y-axis to change the pitch of the Passive Buzzer. (Use GPIO 9 for the joystick Y-axis analog output and GPIO 11 for the passive buzzer.)
+
+
+[step_counter_print]
+Use the GY-521 and a timer to count steps based on movement spikes. Print the step count to the serial console.
+Using the i2c bus 0 defined in the device tree alredy.
+(Use GPIO 38 for I2C SDA and GPIO 39 for I2C SCL.)
