@@ -11,8 +11,7 @@ Large language models (LLMs) and agentic systems show immense promise for automa
 
 To bridge this gap, we introduce a **skills-based agentic framework** and **IoT-SkillsBench**.
 
-<img width="6769" height="4688" alt="system-overview" src="https://github.com/user-attachments/assets/dfdefe99-6868-4381-a8a9-9f26876870f6" />
-
+![demo](docs/assets/system-overview.png)
 
 ### Key Contributions
 
@@ -21,9 +20,8 @@ To bridge this gap, we introduce a **skills-based agentic framework** and **IoT-
 - **378 hardware-validated experiments** — Each task evaluated under three agent configurations (no-skills, LLM-generated skills, and human-expert skills) and validated through real hardware execution, demonstrating that structured human-expert skills enable near-perfect success rates.
 
 
-<video src="https://github.com/user-attachments/assets/e9f83311-8c1b-4790-baca-0ed0304bca5b" autoplay loop muted playsinline width="100%"></video>
 
-
+<video src="https://github.com/iot-agent/iot-skillsbench/raw/main/docs/assets/demo_video.mp4" autoplay loop muted playsinline width="100%"></video>
 
 
 
