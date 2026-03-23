@@ -197,11 +197,14 @@ Token tracking is implemented using [`AIMessage`](https://reference.langchain.co
 If you use this code or benchmark in your research, please cite:
 
 ```bibtex
-@article{yourname2025skilled,
-  title   = {Skilled AI Agents for Embedded and IoT Systems Development},
-  author  = {Author, A. and Author, B.},
-  journal = {arXiv preprint arXiv:XXXX.XXXXX},
-  year    = {2025}
+@misc{li2026skilledaiagentsembedded,
+      title={Skilled AI Agents for Embedded and IoT Systems Development}, 
+      author={Yiming Li and Yuhan Cheng and Mingchen Ma and Yihang Zou and Ningyuan Yang and Wei Cheng and Hai "Helen" Li and Yiran Chen and Tingjun Chen},
+      year={2026},
+      eprint={2603.19583},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2603.19583}, 
 }
 ```
 
