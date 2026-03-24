@@ -12,6 +12,7 @@
 	- Push button: D10 
 	- DHT11 data: D8
 	- Sound sensor (digital output): D3 (with Interrupt)
+	- HC-SR04 ultrasonic distance sensor: D23 (TRIG), D22 (ECHO)
 
 - Analog inputs
 	- TMP36 temperature sensor: A0
