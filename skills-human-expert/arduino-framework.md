@@ -3,6 +3,9 @@ name: Arduino
 description: This skill is for the Arduino framework only.
 ---
 
+## GPIO
+* Implement software debouncing when accepting inputs. Example: 20-50 msec debounce window for button press.
+
 ## I2C
 In Arduino, the Wire library allows you to communicate with I2C devices.
 For Arduino boards, `Wire.begin()` doesn’t take pin arguments because it always uses the fixed hardware I2C pins. Valid forms: 
