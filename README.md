@@ -11,17 +11,29 @@ Large language models (LLMs) and agentic systems show immense promise for automa
 
 To bridge this gap, we introduce a **skills-based agentic framework** and **IoT-SkillsBench**.
 
-![demo](docs/assets/system-overview.png)
+![System Overview](docs/assets/system-overview.png)
 
-### Key Contributions
+### Highlights:
 
 - **IoT-SkillsBench** — A benchmark for evaluating AI agents in real embedded programming environments, spanning 3 platforms, 23 peripherals, and 42 tasks across 3 difficulty levels.
 - **Skills-based agentic framework** — A structured approach to injecting domain knowledge into LLM-based agents for embedded development.
 - **378 hardware-validated experiments** — Each task evaluated under three agent configurations (no-skills, LLM-generated skills, and human-expert skills) and validated through real hardware execution, demonstrating that structured human-expert skills enable near-perfect success rates.
 
+### Demo #1 (Arduino Mega 2560 + Arduino):
 
+💡 Feel free to build your own tasks by creatively combining hardware components from [this peripheral list](docs/atmega2560-arduino-wiring.md) using the wiring diagram below. Here is one example:
+```
+Each time the button is pressed, capture a measurement from the MPU6050 unit, and display it on the LCD1602 along with the current timestamp read from the DS1307 real-time clock.
+```
 
-https://github.com/user-attachments/assets/e9f83311-8c1b-4790-baca-0ed0304bca5b
+<img src="docs/assets/atmega2560-arduino-wiring-15-peripherals.png" alt="Demo Mega2560 Combined" width="600">
+
+### Demo #2 (ESP32-S3 + ESP-IDF):
+```
+Task: "Write the program that will read the password input from the 16-key keypad (password is set to "1234"). If the keypad input matches with the password, the program will connect the relay to unlock the safebox. The program will also display the input password on the LCD1602 display in the format.
+```
+
+![Demo ESP-IDF Safebox](docs/assets/demo-esp-idf-safebox.webp)
 
 
 ---
@@ -31,16 +43,25 @@ https://github.com/user-attachments/assets/e9f83311-8c1b-4790-baca-0ed0304bca5b
 
 ```
 .
+├── docs/                         # Documentation and assets
+│   ├── assets
+│   └── ...
 ├── scripts/
 │   ├── batch_run.py              # Batch task execution
-│   └── auto_test.py              # Automated compile-and-retry (Arduino only)
-├── tasks/
-│   ├── level1/
-│   ├── level2/
-│   └── level3/                   # Task definitions per board/framework
+│   ├── auto_test.py              # Automated compile-and-retry (Arduino only)
+│   └── run_task_single.py        # Run a single task
 ├── skills-human-expert/          # Curated human-expert skills
 ├── skills-llm-generated/         # LLM-generated skills
-├── outputs/                      # Generated code and metadata (created at runtime)
+├── src/                          # Agentic framework (e.g., based on LangGraph)
+│   ├── ...
+│   └── ...
+├── tasks/                        # Task definitions per board/framework
+│   ├── level1/
+│   ├── level2/
+│   ├── level3/
+│   └── single/
+│       └── tmp_task.txt          # Example task for testing the agent
+├── output/                       # Generated code and metadata (created at runtime)
 ├── config.template.yaml          # Configuration template (copy to config.yaml)
 ├── config.yaml                   # Local configuration — DO NOT commit
 └── .env                          # Local API keys — DO NOT commit
@@ -93,6 +114,14 @@ Hardware-in-the-loop evaluation additionally requires a supported board and the 
 
 After completing the [Installation](#installation) steps, run a task:
 
+**Single task run (`tasks/single/tmp_task.txt`):**
+
+```bash
+python scripts/run_task_single.py -o scripts/tmp_output
+```
+
+**Batch run (benchmark file + task id):**
+
 ```bash
 python scripts/batch_run.py -i tasks/level3/level3-ATmega2560-Arduino.txt -t Safe_Box_with_display
 ```
@@ -100,7 +129,7 @@ python scripts/batch_run.py -i tasks/level3/level3-ATmega2560-Arduino.txt -t Saf
 Output is written to:
 
 ```
-outputs/tasks-{board}-{framework}/w_skills_{skills_dir}/{model.name}/{task_id}/
+output/tasks-{board}-{framework}/w_skills_{skills_dir}/{model.name}/{task_id}/
 ```
 
 ---
@@ -145,6 +174,15 @@ Specify the LLM used for code generation:
 model:
   name: "claude-sonnet-4-5"
 ```
+
+### Expected Run Outputs
+
+Each run creates:
+
+- Generated source under run-specific output directory
+- `manifest.lock.json` (artifact manifest)
+- `metadata.json` (task/config/token usage)
+- `debug.json` (per-node debug traces)
 
 ---
 
@@ -197,14 +235,11 @@ Token tracking is implemented using [`AIMessage`](https://reference.langchain.co
 If you use this code or benchmark in your research, please cite:
 
 ```bibtex
-@misc{li2026skilledaiagentsembedded,
+@article{li2026skilledaiagentsembedded,
       title={Skilled AI Agents for Embedded and IoT Systems Development}, 
-      author={Yiming Li and Yuhan Cheng and Mingchen Ma and Yihang Zou and Ningyuan Yang and Wei Cheng and Hai "Helen" Li and Yiran Chen and Tingjun Chen},
-      year={2026},
-      eprint={2603.19583},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2603.19583}, 
+      author={Li, Yiming and Cheng, Yuhan and Ma, Mingchen and Zou, Yihang and Yang, Ningyuan and Cheng, Wei and Li, Hai "Helen" and Chen, Yiran and Chen, Tingjun},
+      journal={arXiv preprint arXiv:2603.19583},
+      year={2026}
 }
 ```
 
@@ -213,3 +248,11 @@ If you use this code or benchmark in your research, please cite:
 ## License
 
 This project is released under the [Apache 2.0 License](LICENSE).
+
+---
+
+## Contact
+
+We welcome feedback, collaboration, and contributions.
+
+- 💬 Open an issue for questions or feature requests
