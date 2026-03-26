@@ -26,7 +26,7 @@ To bridge this gap, we introduce a **skills-based agentic framework** and **IoT-
 Each time the button is pressed, capture a measurement from the MPU6050 unit, and display it on the LCD1602 along with the current timestamp read from the DS1307 real-time clock.
 ```
 
-<img src="docs/assets/atmega2560-arduino-wiring-15-peripherals.png" alt="Demo Mega2560 Combined" width="600">
+![Demo Mega2560 Combined](docs/assets/atmega2560-arduino-wiring-15-peripherals-annotated.png)
 
 ### Demo #2 (ESP32-S3 + ESP-IDF):
 ```
