@@ -58,36 +58,38 @@ Example Task #1 (Left):
 Set RTC to Mar. 3, 2025 at 14:53:28. 
 Then, start collecting MPU6050 measurements every second.
 Display the MPU6050 results and date/time on LCD1602 every second.
-Also print results to serial.
+Also print results to Serial.
 ```
+
+https://github.com/user-attachments/assets/ca4bb3ee-8449-4271-9f20-643701d79142
 
 Example Task #2 (Right):
 ```
 Each time the push button is pressed, capture a measurement from the MPU6050 unit,
 and display it on the LCD1602.
-Also print measurement to Serial.
+Also print the measurement to Serial.
 ```
 
-<video src="https://raw.githubusercontent.com/iot-agent/iot-skillsbench/main/docs/assets/atmega2560-arduino-demo1.mp4" autoplay loop muted playsinline width="49%"></video>
-<video src="https://raw.githubusercontent.com/iot-agent/iot-skillsbench/main/docs/assets/atmega2560-arduino-demo2.mp4" autoplay loop muted playsinline width="49%"></video>
+https://github.com/user-attachments/assets/3c797eb3-16f1-48ed-b92d-458cca80204c
 
 Example Task #3 (Left):
 ```
-Use the joystick to control laser emitter and passive buzzer.
+Use the joystick to control the laser emitter and passive buzzer.
 The joystick's x-axis controls the on/off of the laser emitter.
 The joystick's y-axis controls the passive buzzer's tone at intervals of 100 Hz.
 ```
 
+https://github.com/user-attachments/assets/85ade37b-2ef3-458b-83ae-494acf218387
+
 Example Task #4 (Right):
 ```
 Use the ultrasonic distance sensor to measure distance every second.
-If distance is smaller than 1 meter, turn on the laser emitter and passive buzzer.
+If the distance is smaller than 1 meter, turn on the laser emitter and passive buzzer.
 Set the passive buzzer tone frequency to be proportional to the measured distance.
-If distance is greater than 1 meter, turn off the laser emitter and passive buzzer.
+If the distance is greater than 1 meter, turn off the laser emitter and passive buzzer.
 ```
 
-<video src="https://raw.githubusercontent.com/iot-agent/iot-skillsbench/main/docs/assets/atmega2560-arduino-demo3.mp4" autoplay loop muted playsinline width="49%"></video>
-<video src="https://raw.githubusercontent.com/iot-agent/iot-skillsbench/main/docs/assets/atmega2560-arduino-demo4.mp4" autoplay loop muted playsinline width="49%"></video>
+https://github.com/user-attachments/assets/49abbc48-8237-4314-81ee-2237478c74d6
 
 <a id="demo-setup-2"></a>
 
