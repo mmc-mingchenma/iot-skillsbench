@@ -53,7 +53,7 @@ Large language models (LLMs) and agentic systems show immense promise for automa
   <img src="docs/assets/atmega2560-arduino-wiring-15-peripherals-annotated.png" alt="Demo Mega2560 Combined" width="75%" />
 </p>
 
-Example Task #1 (Left):
+Example Task #1:
 ```
 Set RTC to Mar. 3, 2025 at 14:53:28. 
 Then, start collecting MPU6050 measurements every second.
@@ -63,7 +63,7 @@ Also print results to Serial.
 
 https://github.com/user-attachments/assets/ca4bb3ee-8449-4271-9f20-643701d79142
 
-Example Task #2 (Right):
+Example Task #2:
 ```
 Each time the push button is pressed, capture a measurement from the MPU6050 unit,
 and display it on the LCD1602.
@@ -72,7 +72,7 @@ Also print the measurement to Serial.
 
 https://github.com/user-attachments/assets/3c797eb3-16f1-48ed-b92d-458cca80204c
 
-Example Task #3 (Left):
+Example Task #3:
 ```
 Use the joystick to control the laser emitter and passive buzzer.
 The joystick's x-axis controls the on/off of the laser emitter.
@@ -81,7 +81,7 @@ The joystick's y-axis controls the passive buzzer's tone at intervals of 100 Hz.
 
 https://github.com/user-attachments/assets/85ade37b-2ef3-458b-83ae-494acf218387
 
-Example Task #4 (Right):
+Example Task #4:
 ```
 Use the ultrasonic distance sensor to measure distance every second.
 If the distance is smaller than 1 meter, turn on the laser emitter and passive buzzer.
@@ -94,6 +94,8 @@ https://github.com/user-attachments/assets/49abbc48-8237-4314-81ee-2237478c74d6
 <a id="demo-setup-2"></a>
 
 ### 🧪 Setup #2: ESP32-S3 + ESP-IDF:
+
+Example Task:
 ```
 Task: "Write the program that will read the password input from the 16-key keypad (password is set to "1234").
 If the keypad input matches the password, the program will connect the relay to unlock the safebox.
