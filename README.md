@@ -7,6 +7,8 @@
 
 Official codebase for the paper: **"[Skilled AI Agents for Embedded and IoT Systems Development](https://arxiv.org/abs/2603.19583)"**.
 
+🌐 Language: **English** | [简体中文](docs/README-CN.md)
+
 </div>
 
 > **At a glance**
