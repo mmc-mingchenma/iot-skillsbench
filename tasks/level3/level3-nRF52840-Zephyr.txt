@@ -59,7 +59,9 @@ Demonstrate the timer-based temperature logger system, where the temperature is 
 Set up a system timer that expires every 1 second, and a counter is used to track how many times the timer has expired. Every time the timer expires (i.e., every 1 second), the following things are done in the sequential order:
 The ADC samples the TMP36 analog temperature sensor;
 The calibrated reading is displayed in a new line on the LCD in the format of “Temp #{counter}: {ADC reading} F”
-The most recent reading is always displayed at the end (bottom), and the previous reading will shift up line by line as the new reading comes in every 1 second. In addition, every time the push button is pressed, an interrupt will be triggered that: Reset the counter to start from 1; and clears the LCD display (Use GPIO 12 for the button, GPIO 9 for the TMP36 analog output, GPIO 38 for LCD RS, GPIO 39 for LCD E, and GPIO 40, 41, 10, 21 for LCD data pins D4 through D7 in 4-bit mode.)
+The most recent reading is always displayed at the end (bottom), and the previous reading will shift up line by line as the new reading comes in every 1 second. In addition, every time the push button is pressed, an interrupt will be triggered that: Reset the counter to start from 1; and clears the LCD display 
+For the temperature sensor, using the ADC 0 under path zephyr_user defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
 
 
 [reaction_timer_display]
@@ -70,21 +72,22 @@ For button using the gpios naming(alias) as my-button defined in the device tree
 
 
 [sensor_water_level_display]
-Use the analog water level Sensor to display a "Water Level" bar graph on the LCD. (Use GPIO 9 for the analog water level sensor, GPIO 38 for LCD RS, GPIO 39 for LCD E, and GPIO 40, 41, 10, 21 for LCD data pins D4 through D7 in 4-bit mode.)
+Use the analog water level Sensor to display a "Water Level" bar graph on the LCD. 
+For the water level sensor, using the ADC 0 under path zephyr_user defined in the device tree alredy.
+For LCD1602 using the gpios naming(alias) as D-7, D-6, D-5, D-4, RS, E defined in the device tree alredy.
 
 
 [buzzer_laser_tripwire]
 There is a laser emitter aiming at the Photo-resistor; trigger the activate buzzer if the beam has been blocked. 
-Using the gpios naming(alias) as lock-relay defined in the device tree alredy.
 Using the gpios naming(alias) as my-buzzer defined in the device tree alredy.
 Using the gpios naming(alias) as emitter defined in the device tree alredy.
-
+For the Photo-resistor, using the ADC 0 under path zephyr_user defined in the device tree alredy.
 
 [joystick_buzzer_pitch]
-Use the Joystick Y-axis to change the pitch of the Passive Buzzer. (Use GPIO 9 for the joystick Y-axis analog output and GPIO 11 for the passive buzzer.)
-
+Use the Joystick Y-axis to change the pitch of the Passive Buzzer. 
+For the X axis, using the ADC 0 under path zephyr_user defined in the device tree alredy.
+For the Y axis, using the ADC 1 under path zephyr_user defined in the device tree alredy.
 
 [step_counter_print]
 Use the GY-521 and a timer to count steps based on movement spikes. Print the step count to the serial console.
 Using the i2c bus 0 defined in the device tree alredy.
-(Use GPIO 38 for I2C SDA and GPIO 39 for I2C SCL.)
