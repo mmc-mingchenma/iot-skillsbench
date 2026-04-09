@@ -109,7 +109,45 @@ def create_debug_log(
     }
 
 
-def extract_clean_code(raw_text: str) -> str:
+def _coerce_model_text(content: Any) -> str:
+    """Normalize model output content into a plain text string."""
+    if content is None:
+        return ""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts: List[str] = []
+        for item in content:
+            if isinstance(item, str):
+                parts.append(item)
+                continue
+            if isinstance(item, dict):
+                # Common content-part formats from provider adapters.
+                text_value = item.get("text")
+                if isinstance(text_value, str):
+                    parts.append(text_value)
+                    continue
+                if isinstance(text_value, list):
+                    parts.append(_coerce_model_text(text_value))
+                    continue
+                for key in ("content", "output_text"):
+                    nested = item.get(key)
+                    if nested:
+                        parts.append(_coerce_model_text(nested))
+                        break
+                continue
+            parts.append(str(item))
+        return "\n".join(p for p in parts if p).strip()
+    if isinstance(content, dict):
+        for key in ("text", "content", "output_text"):
+            value = content.get(key)
+            if value:
+                return _coerce_model_text(value)
+        return json.dumps(content, ensure_ascii=False)
+    return str(content)
+
+
+def extract_clean_code(raw_text: Any) -> str:
     """
     Extract C/C++ code from an LLM response.
 
@@ -118,18 +156,20 @@ def extract_clean_code(raw_text: str) -> str:
     - Generic ``` code blocks
     - Raw code with conversational prefixes stripped
     """
+    normalized_text = _coerce_model_text(raw_text)
+
     # Try ```c, ```cpp, or ```cc blocks
-    match = re.search(r"```(?:c|cpp|cc)\n(.*?)```", raw_text, re.DOTALL)
+    match = re.search(r"```(?:c|cpp|cc)\n(.*?)```", normalized_text, re.DOTALL)
     if match:
         return match.group(1).strip()
 
     # Try generic ``` blocks
-    match = re.search(r"```\n(.*?)```", raw_text, re.DOTALL)
+    match = re.search(r"```\n(.*?)```", normalized_text, re.DOTALL)
     if match:
         return match.group(1).strip()
 
     # Fallback: detect code by common starting patterns
-    lines = raw_text.split("\n")
+    lines = normalized_text.split("\n")
     code_lines = []
     started = False
 
@@ -144,7 +184,7 @@ def extract_clean_code(raw_text: str) -> str:
     if code_lines:
         return "\n".join(code_lines).strip()
 
-    return raw_text.strip()
+    return normalized_text.strip()
 
 
 # --- Schema ---
@@ -527,6 +567,7 @@ RULES:
     usage = {}
     if hasattr(response, "usage_metadata") and response.usage_metadata:
         usage = dict(response.usage_metadata)
+    content_text = _coerce_model_text(getattr(response, "content", ""))
 
     debug_log = create_debug_log(
         node="coder",
@@ -534,7 +575,7 @@ RULES:
             "system": system_prompt,
             "user": state["requirements"],
         },
-        output=response.content,
+        output=content_text,
         duration_ms=duration_ms,
         metadata={
             "project_name": project_name,
@@ -546,7 +587,7 @@ RULES:
     token_record = {"node": "coder", "usage": usage}
 
     return {
-        "code_content": response.content,
+        "code_content": content_text,
         "messages": [response],
         "active_skills": active_skills,
         "debug_logs": [debug_log],
