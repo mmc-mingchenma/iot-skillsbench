@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import re
+import shutil
 import threading
 from pathlib import Path
 from typing import Any, AsyncGenerator, List
@@ -53,15 +54,24 @@ def _api_base_from_model_platform(model_platform: str | None) -> str:
     - OPENAI_BASE_URL env (lets Backend control routing)
     - known defaults by model_platform
     """
+    mp = (model_platform or "").strip().lower()
+    # SkillsBench requirement: for OpenRouter mode, prefer LAB_API_BASE
+    # (backend-controlled endpoint), then OPENAI_BASE_URL, then official default.
+    if mp in ("openrouter",):
+        lab_base = (os.environ.get("LAB_API_BASE") or "").strip()
+        if lab_base:
+            return lab_base
+        env_base = (os.environ.get("OPENAI_BASE_URL") or "").strip()
+        if env_base:
+            return env_base
+        return "https://openrouter.ai/api/v1"
+
     env_base = (os.environ.get("OPENAI_BASE_URL") or "").strip()
     if env_base:
         return env_base
 
-    mp = (model_platform or "").strip().lower()
     if mp in ("openai", "chatgpt"):
         return "https://api.openai.com/v1"
-    if mp in ("openrouter",):
-        return "https://openrouter.ai/api/v1"
     # Fallback to OpenAI-compatible default (many gateways accept this shape)
     return "https://api.openai.com/v1"
 
@@ -71,6 +81,63 @@ def _build_project_output_dir(workspace_path: Path, config: AppConfig) -> Path:
     Use project workspace root directly as generation base directory.
     """
     return Path(workspace_path)
+
+
+def _merge_tree(src: Path, dst: Path) -> None:
+    """Merge src directory tree into dst, replacing existing files."""
+    dst.mkdir(parents=True, exist_ok=True)
+    for item in src.iterdir():
+        target = dst / item.name
+        if item.is_dir():
+            _merge_tree(item, target)
+            if item.exists():
+                item.rmdir()
+        else:
+            if target.exists():
+                target.unlink()
+            shutil.move(str(item), str(target))
+
+
+def _flatten_output_into_root(run_dir: Path) -> None:
+    """
+    Move run_dir/output/* into run_dir and remove output folder.
+    This keeps integration output at the project root as requested.
+    """
+    output_dir = run_dir / "output"
+    if not output_dir.is_dir():
+        return
+    for item in output_dir.iterdir():
+        target = run_dir / item.name
+        if item.is_dir():
+            _merge_tree(item, target)
+        else:
+            if target.exists():
+                target.unlink()
+            shutil.move(str(item), str(target))
+    shutil.rmtree(output_dir, ignore_errors=True)
+
+
+def _flatten_run_dir_into_parent(run_dir: Path, parent_dir: Path) -> None:
+    """
+    Move run_dir/* into parent_dir and remove run_dir.
+    This flattens task folder (e.g. `chat/`) into project root.
+    """
+    run_dir = Path(run_dir)
+    parent_dir = Path(parent_dir)
+    if not run_dir.is_dir():
+        return
+    if run_dir.resolve() == parent_dir.resolve():
+        return
+    parent_dir.mkdir(parents=True, exist_ok=True)
+    for item in run_dir.iterdir():
+        target = parent_dir / item.name
+        if item.is_dir():
+            _merge_tree(item, target)
+        else:
+            if target.exists():
+                target.unlink()
+            shutil.move(str(item), str(target))
+    shutil.rmtree(run_dir, ignore_errors=True)
 
 
 class SkillsBenchSession:
@@ -90,7 +157,8 @@ class SkillsBenchSession:
         self._project_id = project_id
         self._workspace_path = Path(workspace_path).resolve()
         self._workspace_registry = workspace_registry
-        self._model_platform = model_platform
+        # Hard guard: this backend always uses OpenRouter routing.
+        self._model_platform = "openrouter"
         self._model_type = model_type
         self._platform = platform
         self._config: AppConfig = load_config(_REPO_ROOT / "config.yaml")
@@ -115,6 +183,11 @@ class SkillsBenchSession:
                     self._config.model,
                     name=((self._model_type or "").strip() or self._config.model.name),
                     api_base=_api_base_from_model_platform(self._model_platform),
+                    api_key_env=(
+                        "LAB_API_KEY"
+                        if (self._model_platform or "").strip().lower() == "openrouter"
+                        else self._config.model.api_key_env
+                    ),
                 ),
                 graph=replace(
                     self._config.graph,
@@ -399,13 +472,16 @@ class SkillsBenchSession:
                     task_file.parent.mkdir(parents=True, exist_ok=True)
                     task_file.write_text(combined, encoding="utf-8")
                     # run_task_single.py takes the same core graph path but raises on failure.
-                    single_run_task(
+                    run_dir = single_run_task(
                         task_path=task_file,
                         task_name=task_id,
                         task_content=combined,
                         config=self._config,
                         output_dir=output_dir,
                     )
+                    run_dir_path = Path(run_dir)
+                    _flatten_output_into_root(run_dir_path)
+                    _flatten_run_dir_into_parent(run_dir_path, output_dir)
                 writer.flush()
                 asyncio.run_coroutine_threadsafe(q.put(("end",)), loop).result(timeout=120)
             except Exception as e:  # noqa: BLE001
@@ -426,6 +502,18 @@ class SkillsBenchSession:
             yield {
                 "type": "status",
                 "data": {"message": f"Output base: {output_dir}"},
+            }
+            yield {
+                "type": "status",
+                "data": {
+                    "message": (
+                        "Model routing: "
+                        f"platform={self._model_platform}, "
+                        f"api_base={self._config.model.api_base}, "
+                        f"api_key_env={self._config.model.api_key_env}, "
+                        f"api_key_present={bool((os.environ.get(self._config.model.api_key_env) or '').strip())}"
+                    )
+                },
             }
 
             current_node = ""

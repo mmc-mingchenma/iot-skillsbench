@@ -76,16 +76,24 @@ def configure_auto_pin_mapping(enabled: bool = True) -> None:
 @lru_cache(maxsize=1)
 def get_model() -> ChatOpenAI:
     """Return a cached LLM instance configured from runtime settings."""
-    api_key = os.environ.get(MODEL_API_KEY_ENV) or os.environ.get("OPENROUTER_API_KEY")
+    api_key = (
+        os.environ.get(MODEL_API_KEY_ENV)
+        or os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("OPENAI_API_KEY")
+        or os.environ.get("LAB_API_KEY")
+    )
     if not api_key:
         raise ValueError(
-            f"Missing API key. Set {MODEL_API_KEY_ENV} (or OPENROUTER_API_KEY)."
+            f"Missing API key. Set {MODEL_API_KEY_ENV} (or OPENROUTER_API_KEY/OPENAI_API_KEY)."
         )
 
     return ChatOpenAI(
         model=MODEL_NAME,
+        api_key=api_key,
+        base_url=MODEL_API_BASE,
         openai_api_key=api_key,
         openai_api_base=MODEL_API_BASE,
+        default_headers={"Authorization": f"Bearer {api_key}"},
         temperature=MODEL_TEMPERATURE,
         max_tokens=8192,
     )
