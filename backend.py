@@ -37,9 +37,10 @@ def _read_workspace_skillsbench_config(workspace_path: Path) -> dict[str, Any]:
 
 def _skills_dir_from_profile(profile: str | None) -> str | None:
     p = (profile or "").strip().lower()
-    if p == "skills-human-expert":
+    # Support both legacy short names and the new @iot-skillsbench/ prefix format.
+    if p in ("skills-human-expert", "@iot-skillsbench/skills-human-expert"):
         return str(_REPO_ROOT / "skills-human-expert")
-    if p == "skills-llm-generated":
+    if p in ("skills-llm-generated", "@iot-skillsbench/skills-llm-generated"):
         return str(_REPO_ROOT / "skills-llm-generated")
     if p == "none":
         return None
@@ -562,6 +563,27 @@ class SkillsBenchSession:
 
                 if " complete -> " in line and line.startswith("✅ "):
                     finished_run_dir = line.split(" complete -> ", 1)[-1].strip()
+                    continue
+
+                # Emit skills info lines as status events so they appear
+                # in the generation log on the Project page.
+                #   - "Skills directory: ..." / "Available skills (...)" / "Skill names: ..."
+                #     come from loader.py scan_skills() inside the manager node.
+                #   - "Project: ..." / "Skills: ..." are printed by run_task_single.py
+                #     after the manager node output.
+                if (
+                    line.startswith("Skills directory:")
+                    or line.startswith("Available skills (")
+                    or line.startswith("Skill names:")
+                    or (
+                        current_node == "manager"
+                        and (line.startswith("Project:") or line.startswith("Skills:"))
+                    )
+                ):
+                    yield {
+                        "type": "status",
+                        "data": {"message": line},
+                    }
                     continue
 
                 if current_node == "persist":

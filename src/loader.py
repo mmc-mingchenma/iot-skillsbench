@@ -55,15 +55,12 @@ class SkillRegistry:
             if skill_path.is_file() and skill_path.name != "README.md":
                 self._parse_skill_metadata(skill_path, is_skill_file=True)
 
-        # Print available skills
-        print(f"📚 Skills directory: {self.skills_dir}")
+        print(f"Skills directory: {self.skills_dir}")
         if self.descriptions:
-            print(f"📚 Available skills ({len(self.descriptions)}):")
-            print(self.descriptions.keys())
-            # for name in sorted(self.descriptions.keys()):
-            #     print(f"   - {name}: {self.descriptions[name]}")
+            print(f"Available skills ({len(self.descriptions)}):")
+            print(f"Skill names: {', '.join(sorted(self.descriptions.keys()))}")
         else:
-            print(f"⚠️  No skills found in {self.skills_dir}")
+            print(f"No skills found in {self.skills_dir}")
 
         return "\n".join(f"- {name}: {desc}" for name, desc in self.descriptions.items())
 
