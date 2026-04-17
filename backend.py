@@ -99,16 +99,18 @@ def _merge_tree(src: Path, dst: Path) -> None:
             shutil.move(str(item), str(target))
 
 
-def _flatten_output_into_root(run_dir: Path) -> None:
+def _flatten_output_into_src(run_dir: Path) -> None:
     """
-    Move run_dir/output/* into run_dir and remove output folder.
-    This keeps integration output at the project root as requested.
+    Move run_dir/output/* into run_dir/src/ and remove output folder.
+    Generated source files (e.g. .ino, .c) land under the project src/ directory.
     """
     output_dir = run_dir / "output"
     if not output_dir.is_dir():
         return
+    src_dir = run_dir / "src"
+    src_dir.mkdir(parents=True, exist_ok=True)
     for item in output_dir.iterdir():
-        target = run_dir / item.name
+        target = src_dir / item.name
         if item.is_dir():
             _merge_tree(item, target)
         else:
@@ -481,7 +483,7 @@ class SkillsBenchSession:
                         output_dir=output_dir,
                     )
                     run_dir_path = Path(run_dir)
-                    _flatten_output_into_root(run_dir_path)
+                    _flatten_output_into_src(run_dir_path)
                     _flatten_run_dir_into_parent(run_dir_path, output_dir)
                 writer.flush()
                 asyncio.run_coroutine_threadsafe(q.put(("end",)), loop).result(timeout=120)
